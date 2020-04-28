@@ -1,0 +1,12 @@
+{
+  "name": "节点实例名",
+  "loggerLevel": "",
+  "vortexPort": 6564,
+  "broker_ip": "r3inbowari.top",
+  "broker_port": "1883",
+  "broker_scheme": "tcp",
+  "broker_username": "r3inb",
+  "broker_password": "159463",
+  "broker_client_id": null,
+  "sensorInformation": null
+}
