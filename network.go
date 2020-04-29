@@ -1,6 +1,7 @@
 package vortex
 
 import (
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"net"
 	"strconv"
@@ -31,7 +32,7 @@ func RunDTUConnector() {
 		conn, err := listener.Accept()
 		if err != nil {
 			Warn("Accept failed", logrus.Fields{"err": err})
-			continue
+			break
 		}
 		go HandleProcessor(conn)
 	}
@@ -78,13 +79,18 @@ func HandleProcessor(conn net.Conn) {
 	defer func() { _ = conn.Close() }()
 	session := RegDTUSession(conn)
 	go session.readConn()
+	// go session.writeConn()
 
-	select {
-	case stop := <-session.stopChan:
-		if stop {
-			Info("disconnected", logrus.Fields{"addr": GetIP(conn)})
-			session.ReleaseDTUSession()
-			break
+	for {
+		select {
+		case stop := <-session.stopChan:
+			if stop {
+				Info("disconnected", logrus.Fields{"addr": GetIP(conn)})
+				session.ReleaseDTUSession()
+				return
+			}
+		case read := <-session.readChan:
+			fmt.Println(string(read))
 		}
 	}
 }
@@ -109,4 +115,17 @@ func (ds *DTUSession) Write(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+/**
+ * write
+ */
+func (ds *DTUSession) writeConn() {
+	for {
+		data := <-ds.writeChan
+		if _, err := ds.conn.Write(data); err != nil {
+			break
+		}
+	}
+	ds.stopChan <- true
 }
