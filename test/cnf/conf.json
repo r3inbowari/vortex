@@ -8,5 +8,34 @@
   "broker_username": "r3inb",
   "broker_password": "159463",
   "broker_client_id": null,
-  "sensorInformation": null
+  "sensor_set": [
+    {
+      "id": "da12-aa2d",
+      "addr": 6,
+      "type": 3,
+      "attach": "192.168.1.222",
+      "order_set": [
+        {
+          "interval": 60,
+          "auto": true,
+          "operation": "BgI=",
+          "name": "getData"
+        }
+      ]
+    },
+    {
+      "id": "da12-b6ac",
+      "addr": 6,
+      "type": 3,
+      "attach": "192.168.1.223",
+      "order_set": [
+        {
+          "interval": 60,
+          "auto": true,
+          "operation": "BgM=",
+          "name": "getData"
+        }
+      ]
+    }
+  ]
 }

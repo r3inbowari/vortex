@@ -1,11 +1,46 @@
 {
   "name": "节点实例名",
-  "vortexPort": 6564,
   "log_level": 4,
+  "vortexPort": 6564,
   "broker_ip": "r3inbowari.top",
   "broker_port": "1883",
   "broker_scheme": "tcp",
   "broker_username": "r3inb",
-  "broker_password": "159463"
-
+  "broker_password": "159463",
+  "sensor_set": [
+    {
+      "id": "da12-aa2d",
+      "addr": 6,
+      "type": 3,
+      "attach": "192.168.1.222",
+      "order_set": [
+        {
+          "interval": 60,
+          "auto": true,
+          "operation": [
+            1,
+            2
+          ],
+          "name": "getData"
+        }
+      ]
+    },
+    {
+      "id": "da12-b6ac",
+      "addr": 6,
+      "type": 3,
+      "attach": "192.168.1.223",
+      "order_set": [
+        {
+          "interval": 60,
+          "auto": true,
+          "operation": [
+            2,
+            2
+          ],
+          "name": "getData"
+        }
+      ]
+    }
+  ]
 }

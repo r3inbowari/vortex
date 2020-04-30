@@ -6,6 +6,6 @@ import (
 
 func main() {
 	vortex.InitLogger()
-	vortex.RunDTUConnector()
-
+	go vortex.RunDTUConnector()
+	select {}
 }

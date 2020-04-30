@@ -22,3 +22,20 @@ func TestSetConfig(t *testing.T) {
 	ls.Name = "节点实例名"
 	_ = ls.SetConfig()
 }
+
+func TestDeadline(t *testing.T) {
+	ls := vortex.GetConfig()
+	println(ls.Name)
+
+	ls = vortex.GetConfig()
+	println(ls.Name)
+}
+
+func TestGetAttach(t *testing.T) {
+	addr := "192.168.1.223"
+	ls := vortex.GetConfig()
+	k := ls.GetSensorSetByAttach(addr)
+	if k[0].Attach != addr {
+		t.Fail()
+	}
+}

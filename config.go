@@ -4,8 +4,12 @@ import (
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"os"
+	"time"
 )
 
+/**
+ * 单条指令
+ */
 type Order struct {
 	Interval  *int64 `json:"interval"`  // 自动测量间隔时间(秒)
 	Auto      *bool  `json:"auto"`      // 自动测量
@@ -25,13 +29,23 @@ type SensorInfo struct {
 	Type   byte   `json:"type"`   // 传感器类型
 	Attach string `json:"attach"` // 传感器附着的透传设备IP
 
-	OrderSet []Order `json:"order"` // 传感器指令集
+	OrderSet []Order `json:"order_set"` // 传感器指令集
+}
+
+func (lc *LocalConfig) GetSensorSetByAttach(ip string) []SensorInfo {
+	var retSet = make([]SensorInfo, 0)
+	for i := 0; i < len(lc.SensorSet); i++ {
+		if lc.SensorSet[i].Attach == ip {
+			retSet = append(retSet, *lc.SensorSet[i])
+		}
+	}
+	return retSet
 }
 
 /**
- * 本地服务
+ * local config struct
  */
-type LocalService struct {
+type LocalConfig struct {
 	Name           string  `json:"name"`             // 收集器名称
 	LoggerLevel    string  `json:"loggerLevel"`      // 日志等级
 	VortexPort     *int    `json:"vortexPort"`       // 服务端口
@@ -42,38 +56,44 @@ type LocalService struct {
 	BrokerPassword *string `json:"broker_password"`  // 中间件密码
 	BrokerClientID *string `json:"broker_client_id"` // ClientID
 
-	SensorSet []*SensorInfo `json:"sensorInformation"` // 传感器集合
+	SensorSet []*SensorInfo `json:"sensor_set"` // 传感器集合
+
+	CacheDeadline time.Time `json:"-"`
 }
 
+var config = new(LocalConfig)
+
 /**
- * Load cnf/conf.json
+ * load cnf/conf.json
  */
-func GetConfig() *LocalService {
-	config := new(LocalService)
-	if err := LoadConfig("cnf/conf.json", config); err != nil {
-		Fatal("Loading File Failed")
-		return nil
+func GetConfig() *LocalConfig {
+	if config.CacheDeadline.Before(time.Now()) {
+		if err := LoadConfig("cnf/conf.json", config); err != nil {
+			Fatal("loading file failed")
+			return nil
+		}
+		config.CacheDeadline = time.Now().Add(time.Second * 60)
 	}
 	return config
 }
 
 /**
- * Save cnf/conf.json
+ * save cnf/conf.json
  */
-func (ls *LocalService) SetConfig() error {
+func (lc *LocalConfig) SetConfig() error {
 	fp, err := os.Create("cnf/conf.json")
 	if err != nil {
-		Fatal("Loading File Failed", logrus.Fields{"err": err})
+		Fatal("loading file failed", logrus.Fields{"err": err})
 	}
 	defer fp.Close()
-	data, err := json.Marshal(ls)
+	data, err := json.Marshal(lc)
 	if err != nil {
-		Fatal("Marshal File Failed", logrus.Fields{"err": err})
+		Fatal("marshal file failed", logrus.Fields{"err": err})
 	}
 	n, err := fp.Write(data)
 	if err != nil {
-		Fatal("Write File Failed", logrus.Fields{"err": err})
+		Fatal("write file failed", logrus.Fields{"err": err})
 	}
-	Info("已更新CONFIG文件", logrus.Fields{"size": n})
+	Info("already update config file", logrus.Fields{"size": n})
 	return nil
 }
