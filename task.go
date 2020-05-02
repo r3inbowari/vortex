@@ -122,7 +122,7 @@ func (ds *DTUSession) TaskSetup() chan Order {
 		if result, err := ds.WriteAndWaitRead(order.Operation); err != nil {
 			order.RemoveTask()
 		} else {
-			println(result)
+			result.SendTopicMsg(order, "hello")
 		}
 	})
 	for _, v := range GetConfig().GetSensorSetByAttach(GetIP(ds.conn)) {

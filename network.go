@@ -1,6 +1,7 @@
 package vortex
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/sirupsen/logrus"
 	"net"
@@ -126,7 +127,7 @@ func (ds *DTUSession) Write(b []byte) error {
 	return nil
 }
 
-func (ds *DTUSession) WriteAndWaitRead(data []byte) ([]byte, error) {
+func (ds *DTUSession) WriteAndWaitRead(data []byte) (DTUResult, error) {
 	if _, err := ds.conn.Write(data); err != nil {
 		return nil, errors.New("request error occurred")
 	}
@@ -136,4 +137,30 @@ func (ds *DTUSession) WriteAndWaitRead(data []byte) ([]byte, error) {
 	case <-time.After(5 * time.Second):
 		return nil, errors.New("request sensor error occurred")
 	}
+}
+
+type DTUResult []byte
+
+/**
+ * 结构
+ */
+type PayloadBody struct {
+	Code      int    `json:"code"`
+	Msg       string `json:"msg"`
+	Data      []byte `json:"data"`
+	ID        string `json:"id"`
+	OrderName string `json:"orderName"`
+	Topic     string `json:"topic"`
+}
+
+func (dr *DTUResult) SendTopicMsg(order Order, topic string) {
+	var pl PayloadBody
+	pl.Code = 200
+	pl.Data = *dr
+	pl.Msg = "succeed"
+	pl.ID = order.ID
+	pl.OrderName = order.Name
+	pl.Topic = topic
+	js, _ := json.Marshal(pl)
+	MQTTPublish(topic, js)
 }
