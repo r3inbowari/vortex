@@ -78,8 +78,8 @@ func (or *Order) RemoveTask() {
 }
 
 /**
- * 单DTU任务阻塞队列的压入
- * @param queueChannel 单DTU内任务的阻塞队列
+ * 任务
+ * @param queueChannel
  */
 func TaskPush(data TaskData) {
 	body := data["data"].(Order)
@@ -90,6 +90,8 @@ func TaskPush(data TaskData) {
 			key := TaskKey{body.ID, body.Name}
 			if err := GetTimeWheel().RemoveTask(key); err != nil {
 				Warn("remove a non existent key", logrus.Fields{"id": body.ID, "order_name": body.Name})
+			} else {
+				Info("remove task", logrus.Fields{"id": body.ID, "order_name": body.Name})
 			}
 		}
 	}()

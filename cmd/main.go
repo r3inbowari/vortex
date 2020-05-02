@@ -6,6 +6,7 @@ import (
 
 func main() {
 	vortex.InitLogger()
-	go vortex.RunDTUConnector()
+	vortex.GetMQTTInstance()
+	go vortex.RunDTUService()
 	select {}
 }

@@ -11,10 +11,10 @@ import (
  * 单条指令
  */
 type Order struct {
-	Interval  *int    `json:"interval"`  // 自动测量间隔时间(秒)
-	Auto      *bool   `json:"auto"`      // 自动测量
-	Operation []byte  `json:"operation"` // 操作指令
-	Name      string  `json:"name"`      // 指令名称
+	Interval  *int   `json:"interval"`  // 自动测量间隔时间(秒)
+	Auto      *bool  `json:"auto"`      // 自动测量
+	Operation []byte `json:"operation"` // 操作指令
+	Name      string `json:"name"`      // 指令名称
 	ID        string `json:"-"`
 }
 
@@ -48,10 +48,9 @@ func (lc *LocalConfig) GetSensorSetByAttach(ip string) []SensorInfo {
  */
 type LocalConfig struct {
 	Name           string  `json:"name"`             // 收集器名称
-	LoggerLevel    string  `json:"loggerLevel"`      // 日志等级
-	VortexPort     *int    `json:"vortexPort"`       // 服务端口
-	BrokerIP       *string `json:"broker_ip"`        // 中间件地址
-	BrokerPort     *string `json:"broker_port"`      // 中间件端口
+	LoggerLevel    *string `json:"log_level"`        // 日志等级
+	VortexPort     *int    `json:"vortex_port"`      // 服务端口
+	BrokerHost     *string `json:"broker_host"`      // 中间件地址
 	BrokerScheme   *string `json:"broker_scheme"`    // 中间件协议
 	BrokerUsername *string `json:"broker_username"`  // 中间件用户名
 	BrokerPassword *string `json:"broker_password"`  // 中间件密码

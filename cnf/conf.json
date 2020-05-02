@@ -1,9 +1,8 @@
 {
   "name": "节点实例名",
-  "log_level": 4,
-  "vortexPort": 6564,
-  "broker_ip": "r3inbowari.top",
-  "broker_port": "1883",
+  "log_level": "debug",
+  "vortex_port": 6564,
+  "broker_host": "r3inbowari.top:1883",
   "broker_scheme": "tcp",
   "broker_username": "r3inb",
   "broker_password": "159463",

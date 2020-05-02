@@ -13,7 +13,7 @@ const Network = "tcp"
 
 var listener net.Listener
 
-func RunDTUConnector() {
+func RunDTUService() {
 	var err error
 	port := GetConfig().VortexPort
 	if port == nil {
@@ -26,7 +26,7 @@ func RunDTUConnector() {
 	if listener, err = net.Listen(Network, ":"+strconv.Itoa(*port)); err != nil {
 		Fatal("listen failed", logrus.Fields{"port": *port, "err": err})
 	} else {
-		Info("dtu listen succeed", logrus.Fields{"port": *port})
+		Info("dtu listened successfully", logrus.Fields{"port": *port})
 	}
 	defer func() { _ = listener.Close() }()
 	for {
@@ -89,7 +89,7 @@ func dtuHandle(conn net.Conn) {
 	go session.readConn()
 
 	// session.LoadTask()
-	session.TaskSetup()
+	qc := session.TaskSetup()
 
 	for {
 		select {
@@ -97,6 +97,7 @@ func dtuHandle(conn net.Conn) {
 			if stop {
 				Info("disconnected", logrus.Fields{"addr": GetIP(conn)})
 				session.Release()
+				close(qc)
 				return
 			}
 		}

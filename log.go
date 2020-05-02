@@ -10,11 +10,25 @@ import (
 
 var log = logrus.New()
 
+var LogLevel = map[string]logrus.Level{
+	"PANIC": logrus.PanicLevel,
+	"FATAL": logrus.FatalLevel,
+	"ERROR": logrus.ErrorLevel,
+	"WARN":  logrus.WarnLevel,
+	"INFO":  logrus.InfoLevel,
+	"DEBUG": logrus.DebugLevel,
+	"TRACE": logrus.TraceLevel,
+}
+
 func InitLogger() {
 	log.Out = os.Stdout
-	log.Level = logrus.DebugLevel
+	if GetConfig().LoggerLevel == nil {
+		log.Level = logrus.DebugLevel
+	} else {
+		log.Level = LogLevel[strings.ToUpper(*GetConfig().LoggerLevel)]
+	}
 	log.SetFormatter(&logrus.TextFormatter{
-		ForceColors: true,
+		ForceColors:   true,
 		FullTimestamp: true,
 	})
 	log.Hooks.Add(NewContextHook())
