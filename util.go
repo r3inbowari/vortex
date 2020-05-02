@@ -86,3 +86,16 @@ func PortInUse(port int) bool {
 	}
 	return false
 }
+
+/**
+ * get map key
+ */
+func GetKeys(m map[int]int) []int {
+	i := 0
+	keys := make([]int, len(m))
+	for k := range m {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
