@@ -88,7 +88,8 @@ func dtuHandle(conn net.Conn) {
 	session := RegDTUSession(conn)
 	go session.readConn()
 
-	session.LoadTask()
+	// session.LoadTask()
+	session.TaskSetup()
 
 	for {
 		select {

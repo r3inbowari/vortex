@@ -15,7 +15,7 @@
       "attach": "127.0.0.1",
       "order_set": [
         {
-          "interval": 60,
+          "interval": 20,
           "auto": true,
           "operation": [
             1,
@@ -32,7 +32,7 @@
       "attach": "127.0.0.1",
       "order_set": [
         {
-          "interval": 60,
+          "interval": 20,
           "auto": true,
           "operation": [
             1,
