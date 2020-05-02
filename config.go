@@ -11,7 +11,7 @@ import (
  * 单条指令
  */
 type Order struct {
-	Interval  *int64 `json:"interval"`  // 自动测量间隔时间(秒)
+	Interval  *int `json:"interval"`  // 自动测量间隔时间(秒)
 	Auto      *bool  `json:"auto"`      // 自动测量
 	Operation []byte `json:"operation"` // 操作指令
 	Name      string `json:"name"`      // 指令名称

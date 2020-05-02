@@ -12,7 +12,24 @@
       "id": "da12-aa2d",
       "addr": 6,
       "type": 3,
-      "attach": "192.168.1.222",
+      "attach": "127.0.0.1",
+      "order_set": [
+        {
+          "interval": 60,
+          "auto": true,
+          "operation": [
+            1,
+            2
+          ],
+          "name": "getData"
+        }
+      ]
+    },
+    {
+      "id": "da12-abba",
+      "addr": 5,
+      "type": 3,
+      "attach": "127.0.0.1",
       "order_set": [
         {
           "interval": 60,

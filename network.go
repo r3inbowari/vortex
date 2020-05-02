@@ -44,6 +44,8 @@ type DTUSession struct {
 	writeChan chan []byte
 	stopChan  chan bool
 	conn      net.Conn
+
+	tw *TimeWheel
 }
 
 var SessionsMap sync.Map
@@ -77,10 +79,16 @@ func GetDTUSessionsKey() []string {
 	return ret
 }
 
+func GetDTUSessions() sync.Map {
+	return SessionsMap
+}
+
 func dtuHandle(conn net.Conn) {
 	defer func() { _ = conn.Close() }()
 	session := RegDTUSession(conn)
 	go session.readConn()
+
+	session.LoadTask()
 
 	for {
 		select {
